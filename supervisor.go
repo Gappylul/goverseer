@@ -108,17 +108,29 @@ func New(strategy Strategy, opts ...Option) *Supervisor {
 //
 // Returns ErrSupervisorStopped if the supervisor has already been stopped.
 func (s *Supervisor) Start() error {
-	s.mu.RLock()
+	s.mu.Lock()
 	if s.stopped {
-		s.mu.RUnlock()
+		s.mu.Unlock()
 		return ErrSupervisorStopped
 	}
-	children := s.children
-	s.mu.RUnlock()
 
-	for _, ch := range children {
-		if err := s.startChild(ch); err != nil {
-			return fmt.Errorf("failed to start child %s: %w", ch.spec.Name, err)
+	// Get snapshot of children specs that need initialization
+	childrenToInit := make([]ChildSpec, 0, len(s.children))
+	for _, ch := range s.children {
+		childrenToInit = append(childrenToInit, ch.spec)
+	}
+
+	// Clear the placeholder children
+	s.children = nil
+	for k := range s.childMap {
+		delete(s.childMap, k)
+	}
+	s.mu.Unlock()
+
+	// Add each child properly through the command system
+	for _, spec := range childrenToInit {
+		if err := s.AddChild(spec); err != nil {
+			return fmt.Errorf("failed to start child %s: %w", spec.Name, err)
 		}
 	}
 

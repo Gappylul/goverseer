@@ -109,7 +109,9 @@ func WithShutdownTimeout(timeout time.Duration) Option {
 func WithChildren(specs ...ChildSpec) Option {
 	return func(s *Supervisor) {
 		for _, spec := range specs {
-			ch := newChild(spec, s.ctx, make(chan *childExit, 1))
+			ch := &child{
+				spec: spec,
+			}
 			s.children = append(s.children, ch)
 			s.childMap[spec.Name] = ch
 		}
