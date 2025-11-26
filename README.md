@@ -1,41 +1,42 @@
 # Goverseer
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/gappylul/goverseer.svg)](https://pkg.go.dev/github.com/gappylul/goverseer)
-[![Go Report Card](https://goreportcard.com/badge/github.com/gappylul/goverseer)](https://goreportcard.com/report/github.com/gappylul/goverseer)
+[![Go Reference](https://pkg.go.dev/badge/github.com/Gappylul/goverseer.svg)](https://pkg.go.dev/github.com/Gappylul/goverseer)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Gappylul/goverseer)](https://goreportcard.com/report/github.com/Gappylul/goverseer)
+[![Tests](https://github.com/Gappylul/goverseer/actions/workflows/test.yml/badge.svg)](https://github.com/Gappylul/goverseer/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/Gappylul/goverseer/branch/main/graph/badge.svg)](https://codecov.io/gh/Gappylul/goverseer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Production-ready process supervision for Go applications inspired by Erlang/OTP.
 
 ## Features
 
-- **Erlang-style supervision trees** with restart strategies
-- **Restart intensity limits** to prevent crash loops
-- **Multiple backoff policies** (exponential, linear, constant, jitter)
-- **Dynamic child management** at runtime
-- **Panic recovery** with stack traces
-- **Graceful shutdown** with configurable timeouts
-- **Event system** for logging and metrics
-- **Hierarchical supervisors** for complex applications
-- **Thread-safe** using actor model
-- **Zero external dependencies**
+✨ **Erlang-style supervision trees** with multiple restart strategies  
+🔄 **Restart intensity limits** to prevent crash loops  
+⏱️ **Multiple backoff policies** (exponential, linear, constant, jitter)  
+🔌 **Dynamic child management** at runtime  
+🛡️ **Panic recovery** with full stack traces  
+🎯 **Graceful shutdown** with configurable timeouts  
+📊 **Event system** for logging and metrics integration  
+🌲 **Hierarchical supervisors** for complex applications  
+🔒 **Thread-safe** using actor model pattern  
+📦 **Zero external dependencies** - pure Go stdlib
 
 ## Installation
-
 ```bash
-go get github.com/gappylul/goverseer
+go get github.com/Gappylul/goverseer
 ```
 
 ## Quick Start
-
 ```go
 package main
 
 import (
     "context"
     "fmt"
+    "log"
     "time"
     
-    "github.com/gappylul/goverseer"
+    "github.com/Gappylul/goverseer"
 )
 
 func worker(ctx context.Context) error {
@@ -67,23 +68,52 @@ func main() {
     )
     
     if err := sup.Start(); err != nil {
-        panic(err)
+        log.Fatal(err)
     }
     
-    // Wait for shutdown signal...
-    sup.Wait()
+    log.Println("Supervisor started")
+    
+    if err := sup.Wait(); err != nil {
+        log.Fatal(err)
+    }
 }
 ```
 
-## Restart Strategies
+## Documentation
 
-- **OneForOne**: Restart only the failed child
-- **OneForAll**: Stop and restart all children
-- **RestForOne**: Restart failed child and all children started after it
-- **SimpleOneForOne**: Dynamic worker pool pattern
+- [GoDoc](https://pkg.go.dev/github.com/Gappylul/goverseer) - Full API documentation
+- [Examples](./examples) - Working code examples
 
-## Restart Types
+## Examples
 
-- **Permanent**: Always restart (use for critical services)
-- **Transient**: Restart only on error/panic (use for tasks that can complete)
-- **Temporary**: Never restart (use for one-off tasks)
+All examples are in the [examples/](./examples) directory:
+
+- **[basic](./examples/basic)** - Simple worker supervision
+- **[restart_types](./examples/restart_types)** - Permanent, Transient, Temporary
+- **[error_handling](./examples/error_handling)** - Retries and panic recovery
+- **[hierarchical](./examples/hierarchical)** - Multi-level supervision trees
+- **[worker_pool](./examples/worker_pool)** - Dynamic worker pool with scaling
+- **[web_server](./examples/web_server)** - HTTP server with supervision
+
+## Testing
+```bash
+# Run all tests
+make test
+
+# Run tests with coverage
+make test-coverage
+
+# Run benchmarks
+make bench
+
+# Run linter
+make lint
+```
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+Inspired by Erlang/OTP's supervisor behavior and similar projects in other languages.

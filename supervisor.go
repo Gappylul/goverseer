@@ -216,7 +216,8 @@ func (s *Supervisor) run() {
 	defer close(s.done)
 	defer s.shutdownChildren()
 
-	childExits := make(chan *childExit, len(s.children)+10)
+	// Use a fixed buffer size instead of reading s.children length
+	childExits := make(chan *childExit, 100)
 
 	for {
 		select {
