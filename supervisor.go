@@ -401,14 +401,31 @@ func (s *Supervisor) handleChildExit(exit *childExit, childExits chan *childExit
 		StackTrace: exit.stackTrace,
 	})
 
-	// Check if we should restart based on restart type
+	// Check if we should restart based on restart type.
 	shouldRestart := s.shouldRestart(exit)
 
 	if !shouldRestart {
+		// Child won't restart - remove it from tracking.
+		s.mu.Lock()
+		delete(s.childMap, exit.child.spec.Name)
+		for i, c := range s.children {
+			if c.spec.Name == exit.child.spec.Name {
+				s.children = append(s.children[:i], s.children[i+1:]...)
+				break
+			}
+		}
+
+		// If no children left, stop the supervisor.
+		if len(s.children) == 0 {
+			s.mu.Unlock()
+			s.cancel() // Make the supervisor exit gracefully.
+			return nil
+		}
+		s.mu.Unlock()
 		return nil
 	}
 
-	// Check restart intensity to prevent restart loops
+	// Check restart intensity to prevent restart loops.
 	if !s.checkRestartIntensity() {
 		s.emitEvent(Event{
 			Time:      time.Now(),
@@ -418,13 +435,13 @@ func (s *Supervisor) handleChildExit(exit *childExit, childExits chan *childExit
 		return ErrIntensityExceeded
 	}
 
-	// Apply backoff delay before restart
+	// Apply backoff delay before restart.
 	delay := s.backoff.ComputeDelay(exit.child.restartCount)
 	if delay > 0 {
 		time.Sleep(delay)
 	}
 
-	// Execute the configured restart strategy
+	// Execute the configured restart strategy.
 	return s.executeStrategy(exit, childExits)
 }
 
