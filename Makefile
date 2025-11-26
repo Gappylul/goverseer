@@ -12,10 +12,6 @@ test-coverage:
 bench:
 	go test -bench=. -benchmem ./...
 
-.PHONY: lint
-lint:
-	golangci-lint run
-
 .PHONY: fmt
 fmt:
 	gofmt -s -w .

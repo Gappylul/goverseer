@@ -105,9 +105,6 @@ make test-coverage
 
 # Run benchmarks
 make bench
-
-# Run linter
-make lint
 ```
 
 ## License
