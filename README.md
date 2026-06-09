@@ -1,9 +1,9 @@
 # Goverseer
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/Gappylul/goverseer.svg)](https://pkg.go.dev/github.com/Gappylul/goverseer)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Gappylul/goverseer)](https://goreportcard.com/report/github.com/Gappylul/goverseer)
-[![Tests](https://github.com/Gappylul/goverseer/actions/workflows/test.yml/badge.svg)](https://github.com/Gappylul/goverseer/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/Gappylul/goverseer/branch/main/graph/badge.svg)](https://codecov.io/gh/Gappylul/goverseer)
+[![Go Reference](https://pkg.go.dev/badge/github.com/vial-labs/goverseer.svg)](https://pkg.go.dev/github.com/vial-labs/goverseer)
+[![Go Report Card](https://goreportcard.com/badge/github.com/vial-labs/goverseer)](https://goreportcard.com/report/github.com/vial-labs/goverseer)
+[![Tests](https://github.com/vial-labs/goverseer/actions/workflows/test.yml/badge.svg)](https://github.com/vial-labs/goverseer/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/vial-labs/goverseer/branch/main/graph/badge.svg)](https://codecov.io/gh/vial-labs/goverseer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Production-ready process supervision for Go applications inspired by Erlang/OTP.
